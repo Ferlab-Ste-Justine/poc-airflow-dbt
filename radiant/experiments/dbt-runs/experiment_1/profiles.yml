@@ -1,0 +1,9 @@
+starrocks_profile:
+  target: dev
+  outputs:
+    dev:
+      type: starrocks
+      host: localhost
+      port: 9030
+      schema: poc_dbt_starrocks_iceberg
+      username: root

@@ -1,0 +1,28 @@
+name: 'poc_dbt_starrocks_iceberg'
+
+config-version: 2
+version: '0.1'
+
+profile: 'starrocks_profile'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analysis"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+    - "logs"
+
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+
+models:
+  poc_dbt_starrocks_iceberg:
+    marts:
+      materialized: table
+
+    staging:
+      materialized: view
