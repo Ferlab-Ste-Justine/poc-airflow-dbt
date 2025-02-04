@@ -150,8 +150,4 @@ This does occur only whenever the docker containers are fresh, meaning that if y
 - **C1**: We can use Iceberg external tables to run `dbt` against a StarRocks data warehouse.
 - **C2**: Both `view` and `table` can be used for `materialization`
 
-## References and Links
-- [Reference 1]
-- [Reference 2]
-- [Reference 3]
 
