@@ -1,23 +1,9 @@
 version: 2
 
-# sources are useful to keep the seeds lineage
 sources:
   - name: raw_sources
     schema: iceberg.jaffle_shop
-
-    # Related to source freshness:
-    # This doesn't apply for our use-case, but it's a feature of dbt-runs
-    freshness:
-      warn_after: {count: 24, period: hour}
-      error_after: {count: 36, period: hour}
-    loaded_at_field: _etl_loaded_at
-
     tables:
       - name: raw_customers
-        freshness: null  # Remove this and the `dbt-runs source freshness` command will fail
-
       - name: raw_orders
-        freshness: null
-
       - name: raw_payments
-        freshness: null

@@ -10,5 +10,5 @@ PROPERTIES
   "aws.s3.secret_key"="password",
   "aws.s3.endpoint"="http://minio:9000",
   "aws.s3.enable_path_style_access"="true",
-  "client.factory"="com.starrocks.connector.iceberg.IcebergAwsClientFactory"
+  "client.factory"="com.starrocks.connector.share.iceberg.IcebergAwsClientFactory"
 );

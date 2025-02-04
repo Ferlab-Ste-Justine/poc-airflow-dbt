@@ -5,5 +5,5 @@ starrocks_profile:
       type: starrocks
       host: localhost
       port: 9030
-      schema: poc_dbt_starrocks_iceberg
+      schema: exp001_iceberg_external_sources
       username: root

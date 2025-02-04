@@ -1,4 +1,4 @@
-name: 'poc_dbt_starrocks_iceberg'
+name: 'exp001_iceberg_external_sources'
 
 config-version: 2
 version: '0.1'
@@ -16,9 +16,9 @@ clean-targets:
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 models:
-  poc_dbt_starrocks_iceberg:
+  exp001_iceberg_external_sources:
     marts:
       materialized: table
 
     staging:
-      materialized: view
+      materialized: table

@@ -1,13 +1,8 @@
-{{
-    config(
-        tags=['customers']
-    )
-}}
+{{ config(tags=['customers']) }}
 
 with source as (
 
     select * from {{ source('raw_sources', 'raw_orders') }}
-
 
 ),
 
