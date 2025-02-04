@@ -63,7 +63,7 @@ We use the following files:
 
 ## Observations
 
-Running the experiment produced the following data hierarchy:
+Running `dbt run` produced the following data hierarchy, observable through `dbt docs`:
 
 ![001_db_structure.png](resources/001_db_structure.png)
 
@@ -74,6 +74,14 @@ Where:
 And the following `dbt` relationship graph:
 
 ![001_dbt_graph.png](resources/001_dbt_graph.png)
+
+And the materialization was tested for both `materialized: table` : 
+
+![001_table_materialization.png](resources/001_table_materialization.png)
+
+and `materialized: view`: 
+
+![001_view_materialization.png](resources/001_view_materialization.png)
 
 **Logs**:
 
@@ -140,8 +148,7 @@ This does occur only whenever the docker containers are fresh, meaning that if y
 ## Conclusion 
 
 - **C1**: We can use Iceberg external tables to run `dbt` against a StarRocks data warehouse.
-- **C2**: Both `view` and `table` can
-
+- **C2**: Both `view` and `table` can be used for `materialization`
 
 ## References and Links
 - [Reference 1]
