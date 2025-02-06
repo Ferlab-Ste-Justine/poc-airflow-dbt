@@ -44,7 +44,7 @@ Question **Q1** therefore covers items `3` and `4`.
 Given the constraints and context, perform the following: 
 
 1. Identify the source dataset.
-2. Load the source data into an Iceberg table. 
+2. Load the source data into a StarRocks table. 
 3. Run `dbt build` (combination of `run` and `test`) to transform the data and test it.
 
 #### Data flows
@@ -52,7 +52,7 @@ Given the constraints and context, perform the following:
 As part of the **Q1**, the following data flows will be modeled:
 
 1. StarRocks --> Iceberg
-2. Iceberg --> Iceberg
+2. Iceberg --> Iceberg (only if previous step is successful)
 
 ### Tools and Resources
 
