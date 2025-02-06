@@ -53,7 +53,7 @@ The experimental stack is composed of the following tech/tools:
 
 #### Data
 
-Re-use the `dbt` tutorial's [Jaffle Shop data](https://github.com/dbt-labs/jaffle-shop?tab=readme-ov-file#-load-the-data-from-s3) as the raw data to be loaded into Iceberg tables.
+Re-use a sample of the `dbt` tutorial's [Jaffle Shop data](https://github.com/dbt-labs/jaffle-shop?tab=readme-ov-file#-load-the-data-from-s3) as the raw data to be loaded into Iceberg tables.
 
 We use the following files:
 
