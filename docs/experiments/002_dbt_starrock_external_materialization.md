@@ -17,7 +17,7 @@ The experiment therefore as the following constraints:
 - Leverage external Iceberg as the data lake format.
 
 **Previous related experiments**
-- [Experiment #1](001_dbt_starrock_external_iceberg_catalog_sources.md).
+- [Experiment #1: External sources](001_dbt_starrock_external_iceberg_catalog_sources.md).
 
 ## Problem Statement
 
@@ -247,4 +247,4 @@ Therefore, configuration for writing to an external catalog is not supported out
 
 ## References
 
-- [Experiment #1](001_dbt_starrock_external_iceberg_catalog_sources.md).
+- [Experiment #1: External sources](001_dbt_starrock_external_iceberg_catalog_sources.md).

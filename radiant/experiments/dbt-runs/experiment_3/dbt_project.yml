@@ -5,9 +5,7 @@ version: '0.1'
 
 profile: 'starrocks_profile'
 
-seed-paths: ["raw_data"]
 model-paths: ["models"]
-macro-paths: ["macros"]
 target-path: "target"
 clean-targets:
     - "target"
@@ -19,8 +17,7 @@ require-dbt-version: [">=1.0.0", "<2.0.0"]
 models:
   exp002_external_materialization:
     marts:
-      materialized: table
-      +schema: iceberg.jaffle_shop
+      materialized: incremental
 
     staging:
       materialized: view
