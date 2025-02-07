@@ -71,7 +71,6 @@ The experimental stack is composed of the following tech/tools:
 - `Iceberg` (https://iceberg.apache.org/): Open table format.
 - `StarRocks` (https://www.starrocks.io/): Analytical data warehouse.
 - `dbt` (https://www.getdbt.com/): Data transformation. 
-- `python` (https://www.python.org/): Used to build scripts to load/clean the data.
 
 #### Data
 
