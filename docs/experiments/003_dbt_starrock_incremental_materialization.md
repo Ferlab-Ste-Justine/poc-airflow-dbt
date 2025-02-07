@@ -157,6 +157,17 @@ We then get the following output:
 
 ![003_updated_schema_run_1.png](resources/003_updated_schema_run_1.png)
 
+Logs show a schema change detected: 
+
+```
+[0m14:25:44.163639 [debug] [Thread-1 (]: 
+    In `expo003_incremental_materialization`.`patients`:
+        Schema change approach: append_new_columns
+        Columns added: [<StarRocksColumn new_column (varchar(1048576))>]
+        Columns removed: 
+        Data types changed: 
+```
+
 If we trigger a full-refresh from that point, we get: 
 
 ![003_updated_schema_run_2.png](resources/003_updated_schema_run_2.png)
@@ -179,6 +190,108 @@ The `materialized: incremental`
 
 > **Note**: This was tested for both `materialized: [view/table]` for staging models.
 
+#### Executed SQL
+
+First-run `sql` code: 
+
+```
+  create table `expo003_incremental_materialization`.`patients`
+    PROPERTIES (
+      "replication_num" = "1"
+    )
+  as 
+
+with studies as (
+
+    select * from `expo003_incremental_materialization`.`stg_studies`
+
+    
+
+),
+
+biospecimens as (
+
+    select * from `expo003_incremental_materialization`.`stg_biospecimens`
+
+    
+
+),
+
+final as (
+
+    select
+        biospecimens.patient_id,
+        count(distinct studies.bio_id) as biospecimens_count,
+        max(studies.created_ts) as last_study_completed_ts
+
+    from biospecimens
+
+    left join studies on biospecimens.bio_id = studies.bio_id
+
+    group by biospecimens.patient_id
+
+)
+
+select * from final
+```
+
+Second-run (incremental) `sql` code:
+
+```
+      insert into `expo003_incremental_materialization`.`patients` (`patient_id`, `biospecimens_count`, `last_study_completed_ts`)
+    (
+        select `patient_id`, `biospecimens_count`, `last_study_completed_ts`
+        from `expo003_incremental_materialization`.`patients__dbt_tmp`
+    )
+```
+
+Where `patients__dbt_tmp` is executed from: 
+
+```
+  create table `expo003_incremental_materialization`.`patients__dbt_tmp`
+    PROPERTIES (
+      "replication_num" = "1"
+    )
+  as 
+
+with studies as (
+
+    select * from `expo003_incremental_materialization`.`stg_studies`
+
+    
+        where created_ts > (select max(last_study_completed_ts) from `expo003_incremental_materialization`.`patients`)
+    
+
+),
+
+biospecimens as (
+
+    select * from `expo003_incremental_materialization`.`stg_biospecimens`
+
+    
+        where created_ts > (select max(last_study_completed_ts) from `expo003_incremental_materialization`.`patients`)
+    
+
+),
+
+final as (
+
+    select
+        biospecimens.patient_id,
+        count(distinct studies.bio_id) as biospecimens_count,
+        max(studies.created_ts) as last_study_completed_ts
+
+    from biospecimens
+
+    left join studies on biospecimens.bio_id = studies.bio_id
+
+    group by biospecimens.patient_id
+
+)
+
+select * from final
+```
+
 ### Updated schema
 
 > The current experiments evaluated in more details 2 different options `sync_all_columns` and `append_new_columns` (the other options were tested manually, but not described here in details for simplicity purposes).
@@ -187,6 +300,74 @@ Both behaviors yielded the expected tables.
 
 - `append_new_columns`: Append new columns to the existing table. Note that this setting does not remove columns from the existing table that are not present in the new data.
 - `sync_all_columns`: Adds any new columns to the existing table, and removes any columns that are now missing. Note that this is inclusive of data type changes. On BigQuery, changing column types requires a full table scan; be mindful of the trade-offs when implementing.
+
+#### Executed SQL
+
+(From the previous `incremental` state)
+
+```
+    alter table `expo003_incremental_materialization`.`patients`
+
+            
+               add column new_column varchar(1048576)
+```
+
+```
+      insert into `expo003_incremental_materialization`.`patients` (`patient_id`, `biospecimens_count`, `last_study_completed_ts`, `new_column`)
+    (
+        select `patient_id`, `biospecimens_count`, `last_study_completed_ts`, `new_column`
+        from `expo003_incremental_materialization`.`patients__dbt_tmp`
+    )
+```
+
+Where `patients__dbt_tmp` is executed from: 
+
+```
+eate table `expo003_incremental_materialization`.`patients__dbt_tmp`
+    PROPERTIES (
+      "replication_num" = "1"
+    )
+  as 
+
+with studies as (
+
+    select * from `expo003_incremental_materialization`.`stg_studies`
+
+    
+        where created_ts > (select max(last_study_completed_ts) from `expo003_incremental_materialization`.`patients`)
+    
+
+),
+
+biospecimens as (
+
+    select * from `expo003_incremental_materialization`.`stg_biospecimens`
+
+    
+        where created_ts > (select max(last_study_completed_ts) from `expo003_incremental_materialization`.`patients`)
+    
+
+),
+
+final as (
+
+    select
+        biospecimens.patient_id,
+        count(distinct studies.bio_id) as biospecimens_count,
+        max(studies.created_ts) as last_study_completed_ts,
+        'foobar' as new_column
+
+    from biospecimens
+
+    left join studies on biospecimens.bio_id = studies.bio_id
+
+    group by biospecimens.patient_id
+
+)
+
+select * from final
+```
+
 
 For more information on schema change: [docs](https://docs.getdbt.com/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change)
 

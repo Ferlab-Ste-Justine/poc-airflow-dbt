@@ -54,7 +54,7 @@ def _get_dfs(number_of_new_rows: int = 20) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     _bio_content = [{
         'bio_id': _new_biospecimen_ids[i],
-        'patient_id': PATIENT_IDS[i % NUM_PATIENTS],  # Round robin the IDs for POC
+        'patient_id': PATIENT_IDS[i % NUM_PATIENTS],  # Round-robin the IDs for POC
         'created_ts': int(time.time()) ,
     } for i in range(number_of_new_rows)]
 

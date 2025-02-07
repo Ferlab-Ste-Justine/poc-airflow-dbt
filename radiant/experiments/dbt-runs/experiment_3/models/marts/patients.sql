@@ -31,7 +31,8 @@ final as (
     select
         biospecimens.patient_id,
         count(distinct studies.bio_id) as biospecimens_count,
-        max(studies.created_ts) as last_study_completed_ts
+        max(studies.created_ts) as last_study_completed_ts,
+        'foobar' as new_column
 
     from biospecimens
 
