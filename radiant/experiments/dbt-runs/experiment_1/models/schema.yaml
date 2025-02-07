@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw_sources
+    schema: iceberg.jaffle_shop
+    tables:
+      - name: raw_customers
+      - name: raw_orders
+      - name: raw_payments

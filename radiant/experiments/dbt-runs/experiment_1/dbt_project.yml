@@ -1,0 +1,24 @@
+name: 'exp001_iceberg_external_sources'
+
+config-version: 2
+version: '0.1'
+
+profile: 'starrocks_profile'
+
+model-paths: ["models"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+    - "logs"
+
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+
+models:
+  exp001_iceberg_external_sources:
+    marts:
+      materialized: table
+
+    staging:
+      materialized: view
