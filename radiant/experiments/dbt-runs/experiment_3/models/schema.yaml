@@ -2,9 +2,7 @@ version: 2
 
 sources:
   - name: raw_sources
-    schema: exp002_external_materialization
+    schema: iceberg.exp003
     tables:
-      - name: raw_customers
-      - name: raw_orders
-      - name: raw_payments
-
+      - name: studies
+      - name: biospecimens

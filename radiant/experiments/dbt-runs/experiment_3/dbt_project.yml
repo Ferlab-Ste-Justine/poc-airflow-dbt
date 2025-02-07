@@ -1,4 +1,4 @@
-name: 'exp002_external_materialization'
+name: 'expo003_incremental_materialization'
 
 config-version: 2
 version: '0.1'
@@ -15,9 +15,9 @@ clean-targets:
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 models:
-  exp002_external_materialization:
+  expo003_incremental_materialization:
     marts:
-      materialized: incremental
+      materialized: table
 
     staging:
       materialized: view

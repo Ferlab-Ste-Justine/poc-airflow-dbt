@@ -5,5 +5,5 @@ starrocks_profile:
       type: starrocks
       host: localhost
       port: 9030
-      schema: exp002_external_materialization
+      schema: expo003_incremental_materialization
       username: root

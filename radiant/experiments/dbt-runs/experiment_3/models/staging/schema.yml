@@ -1,31 +1,28 @@
 version: 2
 
 models:
-  - name: stg_customers
+  - name: stg_studies
     columns:
-      - name: customer_id
+      - name: study_id
+        tests:
+          - not_null
+      - name: bio_id
         tests:
           - unique
+          - not_null
+      - name: created_ts
+        tests:
           - not_null
 
-  - name: stg_orders
+  - name: stg_biospecimens
     columns:
-      - name: order_id
+      - name: bio_id
         tests:
           - unique
           - not_null
-      - name: status
+      - name: patient_id
         tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
-
-  - name: stg_payments
-    columns:
-      - name: payment_id
-        tests:
-          - unique
           - not_null
-      - name: payment_method
+      - name: created_ts
         tests:
-          - accepted_values:
-              values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']
+          - not_null
