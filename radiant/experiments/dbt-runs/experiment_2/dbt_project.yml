@@ -5,7 +5,7 @@ version: '0.1'
 
 profile: 'starrocks_profile'
 
-seed-paths: ["raw_data"]
+seed-paths: ["seeds"]
 model-paths: ["models"]
 macro-paths: ["macros"]
 target-path: "target"
