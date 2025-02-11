@@ -2,7 +2,7 @@
 
 ## Experiment Metadata
 - **Date Initiated:** 2025-02-06
-- **Date Completed:** Ongoing
+- **Date Completed:** 2025-02-11
 - **Related Issue number(s):** 
   - https://d3b.atlassian.net/browse/SJRA-42
 
