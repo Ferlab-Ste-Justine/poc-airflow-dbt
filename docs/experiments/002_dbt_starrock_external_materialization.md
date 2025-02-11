@@ -245,3 +245,5 @@ This causes the downstream `create table` to fail because the table already exis
 Therefore, configuration for writing to an external catalog is not supported out-of-the-box in `dbt-starrocks`.
 
 ## References
+
+- [Experiment #1: External sources](001_dbt_starrock_external_iceberg_catalog_sources.md)
