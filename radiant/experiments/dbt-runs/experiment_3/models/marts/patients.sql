@@ -2,7 +2,8 @@
     config(
         tags=['patients'],
         materialized='incremental',
-        on_schema_change='append_new_columns'
+        partition_type='Expr',
+        partition_by=['patient_id'],
     )
  }}
 
@@ -31,8 +32,7 @@ final as (
     select
         biospecimens.patient_id,
         count(distinct studies.bio_id) as biospecimens_count,
-        max(studies.created_ts) as last_study_completed_ts,
-        'foobar' as new_column
+        max(studies.created_ts) as last_study_completed_ts
 
     from biospecimens
 

@@ -166,3 +166,7 @@ cython_debug/
 # Jupyter Notebook
 iceberg/notebooks
 iceberg/warehouse
+
+
+# Experiment specific
+*.daily_generator

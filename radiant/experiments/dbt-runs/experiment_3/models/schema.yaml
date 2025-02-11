@@ -4,5 +4,7 @@ sources:
   - name: raw_sources
     schema: iceberg.exp003
     tables:
-      - name: studies
-      - name: biospecimens
+#      - name: studies
+#      - name: biospecimens
+      - name: daily_partitioned_studies
+      - name: daily_partitioned_biospecimens

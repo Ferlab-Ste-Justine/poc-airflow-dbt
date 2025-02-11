@@ -1,13 +1,13 @@
 {{
     config(
-        tags=['studies'],
+        tags=['daily_partitioned_studies'],
     )
 
 }}
 
 with source as (
 
-    select * from {{ source('raw_sources', 'studies') }}
+    select * from {{ source('raw_sources', 'daily_partitioned_studies') }}
 
 ),
 

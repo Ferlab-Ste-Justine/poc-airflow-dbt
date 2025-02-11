@@ -27,19 +27,6 @@ The experiment therefore as the following constraints:
 - **Q2**: What happens when we update the schema (add/remove a column)?
 - **Q3**: Can we update a single partition (insert overwrite) when data is partitioned by batch?
 
-### Q1. Incremental Materialization
-
-According to the documentation (https://github.com/StarRocks/dbt-starrocks?tab=readme-ov-file#supported-features),
-`dbt-starrocks` supports `incremental` materialization. 
-
-### Q2. Updated schema
-
-Validate `on_schema_change` options: 
-
-### Q3. Partitions support
-
-.
-
 ## Experiment Design
 
 ### Methodology
@@ -181,6 +168,70 @@ Changing `sync_all_columns` with `append_new_columns` and re-running the previou
 ![003_updated_schema_run_4.png](resources/003_updated_schema_run_4.png)
 
 ### Partitioned `incremental` materialization
+
+Creating partitions is achieved through the following `dbt` sample configuration (other partitioning options exist https://docs.starrocks.io/docs/table_design/data_distribution/expression_partitioning/):
+
+```
+partition_type='Expr',
+partition_by=['patient_id'],
+```
+
+Running `SHOW CREATE TABLE expo003_incremental_materialization.patients;` yields the following specification:
+
+```sql
+CREATE TABLE `patients` (
+  `patient_id` varchar(1048576) NULL COMMENT "",
+  `biospecimens_count` bigint(20) NOT NULL COMMENT "",
+  `last_study_completed_ts` bigint(20) NULL COMMENT ""
+) ENGINE=OLAP 
+DUPLICATE KEY(`patient_id`)
+PARTITION BY (`patient_id`)
+DISTRIBUTED BY RANDOM
+PROPERTIES (
+"bucket_size" = "4294967296",
+"compression" = "LZ4",
+"fast_schema_evolution" = "true",
+"replicated_storage" = "true",
+"replication_num" = "1"
+);
+```
+
+After running the first `dbt run` we can view the following partitions on the data from running: 
+
+```sql
+>>> SHOW PARTITIONS FROM expo003_incremental_materialization.patients;
+10772	ppatient5f1	3	2025-02-11 18:09:11	0	NORMAL	patient_id	(('patient_1'))	ALL KEY	1	1	HDD	9999-12-31 15:59:59		1.8KB	false	2	3	338606889881305092	TXN_NORMAL
+10757	ppatient5f4	3	2025-02-11 18:09:11	0	NORMAL	patient_id	(('patient_4'))	ALL KEY	1	1	HDD	9999-12-31 15:59:59		1.8KB	false	2	3	338606889881305089	TXN_NORMAL
+10758	ppatient5f0	3	2025-02-11 18:09:11	0	NORMAL	patient_id	(('patient_0'))	ALL KEY	1	1	HDD	9999-12-31 15:59:59		1.8KB	false	2	3	338606889881305088	TXN_NORMAL
+10762	ppatient5f2	3	2025-02-11 18:09:11	0	NORMAL	patient_id	(('patient_2'))	ALL KEY	1	1	HDD	9999-12-31 15:59:59		1.8KB	false	2	3	338606889881305090	TXN_NORMAL
+10764	ppatient5f3	3	2025-02-11 18:09:11	0	NORMAL	patient_id	(('patient_3'))	ALL KEY	1	1	HDD	9999-12-31 15:59:59		1.8KB	false	2	3	338606889881305091	TXN_NORMAL
+```
+
+With the full data being: 
+
+```
+>>> SELECT * FROM expo003_incremental_materialization.patients p ORDER BY last_study_completed_ts;
+patient_3	52	1736312400
+patient_0	52	1736312400
+patient_2	52	1736312400
+patient_1	52	1736312400
+patient_4	52	1736312400
+```
+
+Running an update (new data + new `dbt run`) on a partition results in the following data distribution: 
+
+```
+patient_3	52	1736312400
+patient_0	52	1736312400
+patient_2	52	1736312400
+patient_1	52	1736312400
+patient_4	52	1736312400
+patient_1	8	1736485200
+patient_4	8	1736485200
+patient_0	8	1736485200
+patient_3	8	1736485200
+patient_2	8	1736485200
+```
 
 ## Analysis
 
@@ -373,13 +424,55 @@ For more information on schema change: [docs](https://docs.getdbt.com/docs/build
 
 ### Partitioned `incremental` materialization
 
-.
+Partitioning is managed through the `partition_by` and `partition_type` properties:
+
+```
+>>> partition_type='Expr',
+>>> partition_by=['patient_id'],
+
+...
+10516	ppatient5f4 ...
+10515	ppatient5f0 ...
+10518	ppatient5f1 ...
+10506	ppatient5f2 ...
+10508	ppatient5f3 ...
+```
+
+**Insert Overwrite with `dbt-starrocks`**
+
+- Out-of-the-box, there's no mention of `incremental_strategy` or `insert_overwrite` type configuration for `dbt-starrocks` plugin.
+- Manually adding `incremental_strategy='insert_overwrite'` (like what is described [here](https://docs.getdbt.com/docs/build/incremental-strategy)) yields:
+
+```
+The incremental strategy 'insert_overwrite' is not valid for this adapter
+```
+
+Enabling the `insert_overwrite` strategy would require custom macros to be implemented. 
+It would also enable using the new [Dynamic Overwrite](https://docs.starrocks.io/docs/loading/InsertInto/#dynamic-overwrite) option (new in 3.4)
+
+**What happens when there's an update to a partition?**
+
+First, `dbt` creates a `__tmp` table with the same partitioning scheme as the real table:
+
+```sql
+create table `expo003_incremental_materialization`.`patients__dbt_tmp`PARTITION BY patient_id
+```
+
+Then it `insert(s)` the data from the `__tmp` table to the real table:
+
+```
+insert into `expo003_incremental_materialization`.`patients` (`patient_id`, `biospecimens_count`, `last_study_completed_ts`)
+(
+    select `patient_id`, `biospecimens_count`, `last_study_completed_ts`
+    from `expo003_incremental_materialization`.`patients__dbt_tmp`
+)
+```
 
 ## Conclusion 
 
 - **C1**: `incremental` materialization is supported out-of-the-box in `dbt-starrocks`. (See [Observations: Basic incremental materialization](#basic-incremental-materialization))
 - **C2**: Different options for schema change are supported out-of-the-box in `dbt-starrocks` (See [Observations: Updated schema](#updated-schema))
-- **C3**: .
+- **C3**: `insert_overwrite` (Insert+Overwrite mode) is not supported out-of-the-box and would require custom macros to be implemented.
 
 ## References
 
@@ -387,3 +480,4 @@ For more information on schema change: [docs](https://docs.getdbt.com/docs/build
 - [Experiment #2: External Materialization](002_dbt_starrock_external_materialization.md)
 - [dbt-starrocks (Github)](https://github.com/StarRocks/dbt-starrocks?tab=readme-ov-file#supported-features)
 - [dbt `on_schema_change`](https://docs.getdbt.com/docs/build/incremental-models#what-if-the-columns-of-my-incremental-model-change)
+- [StarRocks Expression Partitioning](https://docs.starrocks.io/docs/table_design/data_distribution/expression_partitioning/)

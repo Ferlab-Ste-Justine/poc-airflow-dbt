@@ -1,12 +1,12 @@
 {{
     config(
-        tags=['biospecimens'],
+        tags=['daily_partitioned_biospecimens'],
     )
 }}
 
 with source as (
 
-    select * from {{ source('raw_sources', 'biospecimens') }}
+    select * from {{ source('raw_sources', 'daily_partitioned_biospecimens') }}
 
 ),
 
