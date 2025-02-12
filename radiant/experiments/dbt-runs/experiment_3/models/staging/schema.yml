@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: stg_studies
+    columns:
+      - name: study_id
+        tests:
+          - not_null
+      - name: bio_id
+        tests:
+          - unique
+          - not_null
+      - name: created_ts
+        tests:
+          - not_null
+
+  - name: stg_biospecimens
+    columns:
+      - name: bio_id
+        tests:
+          - unique
+          - not_null
+      - name: patient_id
+        tests:
+          - not_null
+      - name: created_ts
+        tests:
+          - not_null

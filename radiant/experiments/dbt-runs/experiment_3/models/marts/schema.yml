@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: patients
+    columns:
+      - name: patient_id
+        tests:
+          - not_null
+      - name: biospecimens_count
+        tests:
+          - not_null
+      - name: last_study_completed_ts
+        tests:
+          - not_null

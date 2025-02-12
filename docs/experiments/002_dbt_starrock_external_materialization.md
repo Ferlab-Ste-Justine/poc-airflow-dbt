@@ -17,7 +17,7 @@ The experiment therefore as the following constraints:
 - Leverage external Iceberg as the data lake format.
 
 **Previous related experiments**
-- [Experiment #1](001_dbt_starrock_external_iceberg_catalog_sources.md).
+- [Experiment #1: External sources](001_dbt_starrock_external_iceberg_catalog_sources.md).
 
 ## Problem Statement
 
@@ -71,7 +71,6 @@ The experimental stack is composed of the following tech/tools:
 - `Iceberg` (https://iceberg.apache.org/): Open table format.
 - `StarRocks` (https://www.starrocks.io/): Analytical data warehouse.
 - `dbt` (https://www.getdbt.com/): Data transformation. 
-- `python` (https://www.python.org/): Used to build scripts to load/clean the data.
 
 #### Data
 
@@ -247,4 +246,4 @@ Therefore, configuration for writing to an external catalog is not supported out
 
 ## References
 
-- [Experiment #1](001_dbt_starrock_external_iceberg_catalog_sources.md).
+- [Experiment #1: External sources](001_dbt_starrock_external_iceberg_catalog_sources.md)

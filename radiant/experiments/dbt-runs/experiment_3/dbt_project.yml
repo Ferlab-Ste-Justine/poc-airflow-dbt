@@ -1,0 +1,23 @@
+name: 'expo003_incremental_materialization'
+
+config-version: 2
+version: '0.1'
+
+profile: 'starrocks_profile'
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+    - "logs"
+
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+
+models:
+  expo003_incremental_materialization:
+    marts:
+      materialized: table
+
+    staging:
+      materialized: view

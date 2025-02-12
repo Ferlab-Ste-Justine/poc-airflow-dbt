@@ -1,0 +1,9 @@
+starrocks_profile:
+  target: dev
+  outputs:
+    dev:
+      type: starrocks
+      host: localhost
+      port: 9030
+      schema: expo003_incremental_materialization
+      username: root
