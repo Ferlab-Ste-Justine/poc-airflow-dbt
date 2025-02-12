@@ -25,7 +25,7 @@ The experiment therefore as the following constraints:
 **Problem:**
 - **Q1**: Is `incremental` supported out-of-the-box by `dbt-starrocks`?
 - **Q2**: What happens when we update the schema (add/remove a column)?
-- **Q3**: Can we update a single partition (insert overwrite) when data is partitioned by batch?
+- **Q3**: Can we use custom operations (insert+overwrite) when updating partitioned data?
 
 ## Experiment Design
 
@@ -163,7 +163,7 @@ If we remove the `new_column` from the schema and re-run `dbt run` with a new ba
 
 ![003_updated_schema_run_3.png](resources/003_updated_schema_run_3.png)
 
-Changing `sync_all_columns` with `append_new_columns` and re-running the previous tests will yield the following table:
+Another option `append_new_columns` was tested with an empty column and re-running the previous tests will yield the following table:
 
 ![003_updated_schema_run_4.png](resources/003_updated_schema_run_4.png)
 
@@ -467,6 +467,8 @@ insert into `expo003_incremental_materialization`.`patients` (`patient_id`, `bio
     from `expo003_incremental_materialization`.`patients__dbt_tmp`
 )
 ```
+
+
 
 ## Conclusion 
 
