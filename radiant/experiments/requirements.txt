@@ -1,4 +1,0 @@
-dbt-starrocks==1.7.0
-pandas==2.2.3
-pyarrow==19.0.0
-pyiceberg==0.8.1

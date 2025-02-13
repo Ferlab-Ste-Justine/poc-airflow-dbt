@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: raw_sources
+    schema: iceberg.exp004
+    tables:
+      - name: TumorVariantDownload_r21
+      - name: TumorVariantRefDownload_r21
+      - name: PrevalenceDownload_r21
+      - name: PrevalenceDownloadR249S_r21
+      - name: PrognosisDownload_r21

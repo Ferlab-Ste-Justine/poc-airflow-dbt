@@ -1,0 +1,8 @@
+version: 2
+
+models:
+  - name: authors
+    columns:
+      - name: author_names
+        tests:
+          - not_null

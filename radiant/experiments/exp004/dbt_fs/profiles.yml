@@ -3,7 +3,7 @@ starrocks_profile:
   outputs:
     dev:
       type: starrocks
-      host: localhost
+      host: starrocks-fe
       port: 9030
-      schema: radiant
+      schema: expo004_airflow_cosmos
       username: root

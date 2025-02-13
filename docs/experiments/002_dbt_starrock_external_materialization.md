@@ -58,7 +58,7 @@ As part of the **Q1**, the following data flows will be modeled:
 
 #### Environment & Tools
 
-Experimental files located in `radiant/experiments/dbt-runs/experiment_2`
+Experimental files located in `radiant/experiments/exp002`
 
 The following diagram presents the local experimental setup.
 > A `docker-compose.yml` file was used to specify required services. 

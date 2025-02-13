@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: stg_prognosis
+    columns:
+      - name: Prognosis_ID
+        tests:
+          - unique
+          - not_null
+  - name: stg_prevalence
+    columns:
+      - name: Prevalence_ID
+        tests:
+          - unique
+          - not_null
+  - name: stg_prevalence_ref
+    columns:
+      - name: Ref_ID
+        tests:
+          - not_null
+  - name: stg_tumor_variant
+    columns:
+      - name: Mutation_ID
+        tests:
+          - unique
+          - not_null
+  - name: stg_tumor_variant_ref
+    columns:
+      - name: Ref_ID
+        tests:
+          - unique
+          - not_null
+

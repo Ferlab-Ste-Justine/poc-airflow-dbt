@@ -8,7 +8,7 @@ from pyiceberg.catalog import load_catalog
 
 def init_data():
 
-    data_path = "../dbt-runs/experiment_1/raw_data"
+    data_path = "../exp001/raw_data"
     data_files = ["raw_orders.csv", "raw_customers.csv", "raw_payments.csv"]
 
     warehouse = "warehouse"
