@@ -1,4 +1,4 @@
-# Experimentation Journal: Incremental materialization
+# Experimentation Journal: Airflow + Cosmos
 
 ## Experiment Metadata
 - **Date Initiated:** 2025-02-12
@@ -24,7 +24,7 @@ The experiment therefore as the following constraints:
 ## Problem Statement
 
 **Problem:**
-- **Q1**: Does `cosmos` (airflow plugin for `dbt`) works out-of-the-box?
+- **Q1**: Does [cosmos](https://github.com/astronomer/astronomer-cosmos/) (airflow plugin for `dbt`) works out-of-the-box?
 
 ## Experiment Design
 
@@ -41,28 +41,6 @@ It contains the following files:
 - Prevalence of tumor variants by tumor site 		
 - Prevalence of the R249S TP53 variants in liver cancer 		
 - Prognostic value of tumor variants
-
-### Tools and Resources
-
-#### Environment & Tools
-
-Experimental files located in `radiant/experiments/exp004`
-
-The following diagram presents the local experimental setup.
-
-> **Note**:
-> 
-> The `docker-compose.yml` file used to deploy the services is located at `.../exp004/docker-compose.yml`
->
-> Make sure to build the custom docker image containing the `dbt-starrocks` dependency 
-prior to running the `make airflow-run` command. 
-> 
-> You can spin-up the services by running `make airflow-run`
-
-![004_stack.png](resources/004_stack.png)
-
-
-#### Data Generation
 
 A Python script was developed to load the TP53 dataset into an `iceberg` table.
 It's located at `.../exp004/load_raw_data_into_iceberg.py`.
@@ -83,6 +61,25 @@ PrognosisDownload_r21
 TumorVariantDownload_r21   
 TumorVariantRefDownload_r21
 ```
+
+### Tools and Resources
+
+#### Environment & Tools
+
+Experimental files located in `radiant/experiments/exp004`
+
+The following diagram presents the local experimental setup.
+
+> **Note**:
+> 
+> The `docker-compose.yml` file used to deploy the services is located at `.../exp004/docker-compose.yml`
+>
+> Make sure to build the custom docker image containing the `dbt-starrocks` dependency 
+prior to running the `make airflow-run` command. 
+> 
+> You can spin-up the services by running `make airflow-run`
+
+![004_stack.png](resources/004_stack.png)
 
 #### Cosmos workflow
 
@@ -144,5 +141,6 @@ The docs are available through the `Browse` menu tab.
 
 - [Experiment #1: External sources](001_dbt_starrock_external_iceberg_catalog_sources.md)
 - [Experiment #2: External Materialization](002_dbt_starrock_external_materialization.md)
-- [Experiment #3: Incremental Materialization](003_dbt_starrock_incremental_materialization.md).
+- [Experiment #3: Incremental Materialization](003_dbt_starrock_incremental_materialization.md)
+- [cosmos](https://github.com/astronomer/astronomer-cosmos/)
 - [TP53 Dataset](https://tp53.cancer.gov/)
