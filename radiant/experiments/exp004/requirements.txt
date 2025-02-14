@@ -1,0 +1,7 @@
+airflow==1.2.0
+astronomer-cosmos==1.8.2
+dbt-starrocks==1.7.0
+pandas==2.2.3
+pyarrow==19.0.0
+pyiceberg==0.8.1
+starrocks==1.2.0

@@ -1,9 +1,0 @@
-starrocks_profile:
-  target: dev
-  outputs:
-    dev:
-      type: starrocks
-      host: localhost
-      port: 9030
-      schema: radiant
-      username: root

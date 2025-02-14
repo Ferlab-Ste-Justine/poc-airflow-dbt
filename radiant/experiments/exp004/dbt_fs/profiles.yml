@@ -1,0 +1,9 @@
+starrocks_profile:
+  target: dev
+  outputs:
+    dev:
+      type: starrocks
+      host: starrocks-fe
+      port: 9030
+      schema: expo004_airflow_cosmos
+      username: root

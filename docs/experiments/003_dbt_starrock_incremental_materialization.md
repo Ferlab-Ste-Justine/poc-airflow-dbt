@@ -52,7 +52,7 @@ With the desired outcome of the experiment to produce a `patients` table with th
 
 #### Environment & Tools
 
-Experimental files located in `radiant/experiments/dbt-runs/experiment_3`
+Experimental files located in `radiant/experiments/exp003`
 
 The following diagram presents the local experimental setup.
 > A `docker-compose.yml` file was used to specify required services. 

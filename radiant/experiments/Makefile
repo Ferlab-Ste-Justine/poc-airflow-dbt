@@ -1,12 +1,27 @@
 .PHONY: all
 
+AIRFLOW_COMPOSE_FILE := ./exp004/docker-compose.yml
+AIRFLOW_DOCKERFILE_LOC := ./exp004/
+AIRFLOW_IMAGE_NAME := airflow-cosmos
+
 COMPOSE_FILE := ../iceberg/docker-compose.yml
 DOCKER_COMPOSE := $(shell if command -v docker compose >/dev/null 2>&1; then echo "docker compose"; else echo "docker-compose"; fi)
-SQL_PATH := ./sql/create_iceberg_catalog.sql
+SQL_PATH := ./sql/
 
+# Start Airflow stack
+airflow-run:
+	@AIRFLOW_IMAGE_NAME=$(AIRFLOW_IMAGE_NAME) $(DOCKER_COMPOSE) -f $(AIRFLOW_COMPOSE_FILE) up
+
+# Stop Airflow stack
+airflow-down:
+	@$(DOCKER_COMPOSE) -f $(AIRFLOW_COMPOSE_FILE) down
+
+# Build custom Airflow Docker image
+build-airflow-cosmos:
+	docker build -t $(AIRFLOW_IMAGE_NAME) $(AIRFLOW_DOCKERFILE_LOC)
 # Create external Iceberg catalog
 create-iceberg-catalog:
-	@$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) exec -T starrocks-fe mysql -P 9030 -h 127.0.0.1 -u root < $(SQL_PATH)
+	@cd $(SQL_PATH) && python create_iceberg_catalog.py && cd -
 
 # Shutdown DB container
 docker-down:
