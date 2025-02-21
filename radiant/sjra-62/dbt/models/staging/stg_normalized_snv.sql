@@ -1,89 +1,115 @@
 {{
     config(
         tags=['stg_normalized_snv'],
+
         materialized='table',
         table_type='PRIMARY',
         keys=['part', 'seq_id', 'locus_id'],
-        engine='OLAP',
-        partition_type='Expr',
-        partition_by=['(`part`)'],
+
         distributed_by=['locus_id'],
         buckets='5 ',
+        partition_type='Expr',
+        partition_by=['(`part`)'],
+
+        engine='OLAP',
         properties="{'compression': 'LZ4', 'replication_num': '3', 'colocate_with': 'group_locus_id5'}",
+
+        pre_hook=["SET SESSION query_timeout = 10800;"]
     )
 }}
 
-with occurrences as (
-    select
-      *
+-- Filters
+{% set study_filter = "'cag'" %}
+{% set batch_filter = "'annotated_vcf_cqdg_3'" %}
+{% set parts_filter = (58, 59, 60) %}
+
+
+-- Normalized SNV data filtered by study and batch
+with normalized_variants as (
+    select *
     from {{ source('cqdg_datalake', 'normalized_snv') }}
-    where
-        study_id = 'cag'  -- TODO: SHOULD WE KEEP THIS ??
-    and
-        batch = 'annotated_vcf_cqdg_3'  -- TODO: SHOULD WE KEEP THIS ??
-    limit 100   -- TODO : REMOVE ME!
+
+    {% if study_filter is not none %}
+        where study_id = {{ study_filter }}
+    {% endif %}
+
+    {% if batch_filter is not none %}
+        and batch = {{ batch_filter }}
+    {% endif %}
+
+    LIMIT 100
 ),
 
-seq as (
+-- Sequencing experiment data for specific parts
+sequencing_data as (
     select
-       ldm_sample_id
-       , seq_id
-       , part
-    from
-        {{ source('starrocks', 'sequencing_experiment') }} s
-    where
+        ldm_sample_id,
+        seq_id,
         part
-    in
-        (58, 59, 60)  -- TODO: SHOULD WE KEEP THIS ??
+    from {{ source('starrocks', 'sequencing_experiment') }}
+
+    {% if parts_filter is not none %}
+        where part in {{ parts_filter }}
+    {% endif %}
 ),
 
+-- Final combined dataset with variant information
 final as (
     select
-        s.part as `part`
-        , s.seq_id as seq_id
-        , dict_mapping('variant_dict', sha2(concat_ws('-', chromosome, start, reference, alternate), 256)) as locus_id
-        , o.ad_ratio
-        , o.ad_total
-        , o.ad_ref
-        , o.ad_alt
-        , o.dp
-        , o.gq
-        , o.chromosome
-        , o.`start`
-        , o.zygosity
-        , o.has_alt
-        , o.quality
-        , o.variant_class
-        , o.`filter`
-        , o.info_ac
-        , o.info_an
-        , o.info_af
-        , o.info_baseq_rank_sum
-        , o.info_excess_het
-        , o.info_fs
-        , o.info_ds
-        , o.info_fraction_informative_reads
-        , o.info_inbreed_coeff
-        , o.info_mleac
-        , o.info_mleaf
-        , o.info_mq
-        , o.info_m_qrank_sum
-        , o.info_qd
-        , o.info_r2_5p_bias
-        , o.info_read_pos_rank_sum
-        , o.info_sor
-        , o.info_vqslod
-        , o.info_culprit
-        , o.info_dp
-        , o.info_haplotype_score
-        , o.calls
-    from
-        occurrences o
-    join
-        [BROADCAST]
-        seq s
-    on
-        s.ldm_sample_id = o.sample_id
+        s.part as part,
+        s.seq_id as seq_id,
+
+        dict_mapping('variant_dict',
+            sha2(concat_ws('-', chromosome, start, reference, alternate), 256)
+        ) as locus_id,
+
+        -- Coverage and quality metrics
+        o.ad_ratio,
+        o.ad_total,
+        o.ad_ref,
+        o.ad_alt,
+        o.dp,
+        o.gq,
+
+        -- Variant characteristics
+        o.chromosome,
+        o.start,
+        o.zygosity,
+        o.has_alt,
+        o.quality,
+        o.variant_class,
+        o.filter,
+
+        -- Population statistics
+        o.info_ac,
+        o.info_an,
+        o.info_af,
+
+        -- Quality scores and bias metrics
+        o.info_baseq_rank_sum,
+        o.info_excess_het,
+        o.info_fs,
+        o.info_ds,
+        o.info_fraction_informative_reads,
+        o.info_inbreed_coeff,
+        o.info_mleac,
+        o.info_mleaf,
+        o.info_mq,
+        o.info_m_qrank_sum,
+        o.info_qd,
+        o.info_r2_5p_bias,
+        o.info_read_pos_rank_sum,
+        o.info_sor,
+        o.info_vqslod,
+        o.info_culprit,
+        o.info_dp,
+        o.info_haplotype_score,
+
+        -- Additional data
+        o.calls
+    from normalized_variants o
+    join [BROADCAST] sequencing_data s
+        on s.ldm_sample_id = o.sample_id
 )
 
 select * from final

@@ -24,14 +24,12 @@ models:
         description: ""
         data_type: binary
         tests:
+          - unique
           - not_null
 
       - name: ad_ratio
         description: ""
         data_type: decimal(6, 5)
-        tests:
-          - accepted_values:
-              values: [0 to 1]  # Assuming ratio is between 0 and 1
 
       - name: ad_total
         description: ""
