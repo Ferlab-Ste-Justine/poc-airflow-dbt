@@ -1,0 +1,20 @@
+name: 'sjra62'
+
+config-version: 2
+version: '0.1'
+
+profile: 'starrocks_profile'
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_modules"
+    - "logs"
+
+require-dbt-version: [">=1.0.0", "<2.0.0"]
+
+models:
+  sjra62:
+    staging:
+      materialized: table

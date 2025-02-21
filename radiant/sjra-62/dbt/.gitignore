@@ -1,0 +1,4 @@
+# dbt-specific
+./logs
+./target
+.user.yml

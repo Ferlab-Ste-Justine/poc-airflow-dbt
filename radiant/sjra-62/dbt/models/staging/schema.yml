@@ -1,0 +1,170 @@
+version: 2
+
+models:
+  - name: stg_normalized_snv
+    description: ""
+    config:
+      contract:
+        enforced: true
+        alias_types: false
+    columns:
+      - name: part
+        description: ""
+        data_type: tinyint
+        tests:
+          - not_null
+
+      - name: seq_id
+        description: ""
+        data_type: int
+        tests:
+          - not_null
+
+      - name: locus_id
+        description: ""
+        data_type: binary
+        tests:
+          - not_null
+
+      - name: ad_ratio
+        description: ""
+        data_type: decimal(6, 5)
+        tests:
+          - accepted_values:
+              values: [0 to 1]  # Assuming ratio is between 0 and 1
+
+      - name: ad_total
+        description: ""
+        data_type: int
+
+      - name: ad_ref
+        description: ""
+        data_type: int
+
+      - name: ad_alt
+        description: ""
+        data_type: int
+
+      - name: dp
+        description: ""
+        data_type: int
+
+      - name: gq
+        description: ""
+        data_type: int
+
+      - name: chromosome
+        description: ""
+        data_type: varchar(2)
+
+      - name: start
+        description: ""
+        data_type: bigint
+
+      - name: zygosity
+        description: ""
+        data_type: varchar(5)
+
+      - name: has_alt
+        description: ""
+        data_type: boolean
+
+      - name: quality
+        description: ""
+        data_type: decimal(10, 3)
+
+      - name: variant_class
+        description: ""
+        data_type: varchar(50)
+
+      - name: filter
+        description: ""
+        data_type: varchar(100)
+
+      - name: info_ac
+        description: ""
+        data_type: int
+
+      - name: info_an
+        description: ""
+        data_type: int
+
+      - name: info_af
+        description: ""
+        data_type: decimal(6, 5)
+
+      - name: info_baseq_rank_sum
+        description: ""
+        data_type: decimal(10, 4)
+
+      - name: info_excess_het
+        description: ""
+        data_type: decimal(10, 4)
+
+      - name: info_fs
+        description: ""
+        data_type: decimal(7, 3)
+
+      - name: info_ds
+        description: ""
+        data_type: boolean
+
+      - name: info_fraction_informative_reads
+        description: ""
+        data_type: decimal(6, 5)
+
+      - name: info_inbreed_coeff
+        description: ""
+        data_type: decimal(6, 4)
+
+      - name: info_mleac
+        description: ""
+        data_type: array<int>
+
+      - name: info_mleaf
+        description: ""
+        data_type: array<DECIMAL(6, 4)>
+
+      - name: info_mq
+        description: ""
+        data_type: decimal(7, 3)
+
+      - name: info_m_qrank_sum
+        description: ""
+        data_type: decimal(10, 4)
+
+      - name: info_qd
+        description: ""
+        data_type: decimal(7, 3)
+
+      - name: info_r2_5p_bias
+        description: ""
+        data_type: decimal(6, 4)
+
+      - name: info_read_pos_rank_sum
+        description: ""
+        data_type: decimal(7, 3)
+
+      - name: info_sor
+        description: ""
+        data_type: decimal(7, 3)
+
+      - name: info_vqslod
+        description: ""
+        data_type: decimal(7, 3)
+
+      - name: info_culprit
+        description: ""
+        data_type: varchar(20)
+
+      - name: info_dp
+        description: ""
+        data_type: int
+
+      - name: info_haplotype_score
+        description: ""
+        data_type: decimal(6, 4)
+
+      - name: calls
+        description: ""
+        data_type: array<int(2)>

@@ -1,0 +1,10 @@
+starrocks_profile:
+  target: dev
+  outputs:
+    dev:
+      type: starrocks
+      host: localhost
+      port: 9040
+      schema: test
+      username: "{{ env_var('CQDG_STARROCKS_USER') }}"
+      password: "{{ env_var('CQDG_STARROCKS_PASSWORD') }}"

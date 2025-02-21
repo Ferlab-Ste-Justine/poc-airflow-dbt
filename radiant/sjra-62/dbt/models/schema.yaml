@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: cqdg_datalake
+    schema: cqdg_datalake.cqdg_portal_prod
+    tables:
+      - name: normalized_snv
+
+  - name: starrocks
+    schema: test
+    tables:
+      - name: sequencing_experiment
