@@ -37,7 +37,7 @@ with normalized_variants as (
         and batch = {{ batch_filter }}
     {% endif %}
 
-    LIMIT 100
+    LIMIT 100 -- TODO : Remove me!
 ),
 
 -- Sequencing experiment data for specific parts

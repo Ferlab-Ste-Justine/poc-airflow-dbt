@@ -3,8 +3,8 @@ starrocks_profile:
   outputs:
     dev:
       type: starrocks
-      host: localhost
-      port: 9040
-      schema: test
+      host: "{{ env_var('CQDG_STARROCKS_HOST') }}"
+      port: "{{ env_var('CQDG_STARROCKS_PORT') }}"
+      schema: "{{ env_var('CQDG_STARROCKS_SCHEMA') }}"
       username: "{{ env_var('CQDG_STARROCKS_USER') }}"
       password: "{{ env_var('CQDG_STARROCKS_PASSWORD') }}"
