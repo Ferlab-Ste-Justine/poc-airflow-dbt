@@ -76,7 +76,6 @@ final as (
         o.start,
         o.zygosity,
         o.has_alt,
-        o.quality,
         o.variant_class,
         o.filter,
 
