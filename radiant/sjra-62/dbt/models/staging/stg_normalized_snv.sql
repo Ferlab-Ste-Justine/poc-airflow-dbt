@@ -22,7 +22,7 @@
 {% set study_filter = "'cag'" %}
 {% set batch_filter = "'annotated_vcf_cqdg_3'" %}
 {% set parts_filter = (58, 59, 60) %}
-
+{% set lookup_table = ref('stg_locus_lookup').identifier %}
 
 -- Normalized SNV data filtered by study and batch
 with normalized_variants as (
@@ -58,7 +58,7 @@ final as (
         s.seq_id as seq_id,
 
         dict_mapping(
-            'stg_locus_lookup',
+            "{{ lookup_table }}",
             md5(concat_ws('-', chromosome, start, reference, alternate)),
             'locus_id'
         )
