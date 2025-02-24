@@ -22,9 +22,8 @@ models:
 
       - name: locus_id
         description: ""
-        data_type: binary
+        data_type: largeint
         tests:
-          - unique
           - not_null
 
       - name: ad_ratio
@@ -166,3 +165,25 @@ models:
       - name: calls
         description: ""
         data_type: array<int(2)>
+
+  - name: stg_locus_lookup
+    description: ""
+    config:
+      contract:
+        enforced: true
+        alias_types: false
+
+    columns:
+      - name: locus_id
+        description: ""
+        data_type: largeint
+        tests:
+          - is_unique
+          - not_null
+
+      - name: locus
+        description: ""
+        data_type: varchar
+        tests:
+          - is_unique
+          - not_null

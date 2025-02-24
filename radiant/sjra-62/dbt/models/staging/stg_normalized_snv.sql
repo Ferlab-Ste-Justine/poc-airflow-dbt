@@ -36,8 +36,6 @@ with normalized_variants as (
     {% if batch_filter is not none %}
         and batch = {{ batch_filter }}
     {% endif %}
-
-    LIMIT 100 -- TODO : Remove me!
 ),
 
 -- Sequencing experiment data for specific parts
@@ -59,9 +57,12 @@ final as (
         s.part as part,
         s.seq_id as seq_id,
 
-        dict_mapping('variant_dict',
-            sha2(concat_ws('-', chromosome, start, reference, alternate), 256)
-        ) as locus_id,
+        dict_mapping(
+            'stg_locus_lookup',
+            md5(concat_ws('-', chromosome, start, reference, alternate)),
+            'locus_id'
+        )
+        as locus_id,
 
         -- Coverage and quality metrics
         o.ad_ratio,

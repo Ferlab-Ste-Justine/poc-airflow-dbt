@@ -5,6 +5,7 @@ version: '0.1'
 
 profile: 'starrocks_profile'
 
+test-paths: ["tests"]
 model-paths: ["models"]
 target-path: "target"
 clean-targets:
