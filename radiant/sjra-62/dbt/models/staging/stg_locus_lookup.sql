@@ -9,9 +9,7 @@
         buckets='5 ',
 
         engine='OLAP',
-        properties="{'compression': 'LZ4', 'replication_num': '3', 'colocate_with': 'group_locus_id5'}",
-
-        pre_hook=["SET SESSION query_timeout = 10800;"]
+        properties="{'compression': 'LZ4', 'replication_num': '3', 'colocate_with': 'group_locus_id5'}"
     )
 }}
 
