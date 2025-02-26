@@ -15,7 +15,7 @@
 
 with locuses as (
 
-    select distinct md5(concat_ws('-', chromosome, start, reference, alternate)) as locus
+    select distinct sha2(concat_ws('-', chromosome, start, reference, alternate), 256) as locus
     from {{ source('cqdg_datalake', 'normalized_snv') }}
 ),
 
