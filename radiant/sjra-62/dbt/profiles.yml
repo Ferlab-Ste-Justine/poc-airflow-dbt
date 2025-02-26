@@ -8,3 +8,5 @@ starrocks_profile:
       schema: "{{ env_var('CQDG_STARROCKS_SCHEMA') }}"
       username: "{{ env_var('CQDG_STARROCKS_USER') }}"
       password: "{{ env_var('CQDG_STARROCKS_PASSWORD') }}"
+      is_async: true
+      async_query_timeout: 3600 # 1 hour
