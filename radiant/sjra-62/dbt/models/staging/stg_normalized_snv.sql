@@ -59,7 +59,7 @@ final as (
 
         dict_mapping(
             "{{ lookup_table }}",
-            sha2(concat_ws('-', chromosome, start, reference, alternate), 256),
+            {{ generate_locus_fields_hash(['chromosome', 'start', 'reference', 'alternate']) }},
             'locus_id'
         )
         as locus_id,
