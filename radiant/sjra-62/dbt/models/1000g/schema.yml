@@ -1,0 +1,73 @@
+version: 2
+
+models:
+
+  - name: 1000g_locus_lookup
+    description: ""
+    config:
+      contract:
+        enforced: true
+        alias_types: false
+
+    columns:
+      - name: locus_id
+        description: ""
+        data_type: largeint
+        data_tests:
+          - is_unique
+          - not_null
+
+      - name: locus
+        description: ""
+        data_type: varchar
+        data_tests:
+          - is_unique
+          - not_null
+
+  - name: variants
+    description: ""
+    config:
+      contract:
+        enforced: true
+        alias_types: false
+
+    columns:
+      - name: locus_id
+        description: ""
+        data_type: largeint
+        data_tests:
+          - not_null
+
+      - name: hash
+        description: ""
+        data_type: varchar
+        data_tests:
+          - not_null
+
+  - name: variants_freq
+    description: ""
+    columns:
+      - name: locus_id
+        description: ""
+        data_type: largeint
+        data_tests:
+          - is_unique
+          - not_null
+
+      - name: pc
+        description: ""
+        data_type: int
+        data_tests:
+          - not_null
+
+      - name: ac
+        description: ""
+        data_type: int
+        data_tests:
+          - not_null
+
+      - name: hom
+        description: ""
+        data_type: int
+        data_tests:
+          - not_null

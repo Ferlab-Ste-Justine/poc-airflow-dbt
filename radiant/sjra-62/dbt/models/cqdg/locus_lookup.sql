@@ -1,6 +1,6 @@
 {{
     config(
-        tags=['stg_locus_locup'],
+        tags=['locus_lookup'],
 
         materialized='table',
         table_type='PRIMARY',

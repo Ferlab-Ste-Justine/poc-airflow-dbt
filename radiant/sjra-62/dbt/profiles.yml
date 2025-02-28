@@ -4,7 +4,7 @@ starrocks_profile:
     dev:
       type: starrocks
       host: "{{ env_var('CQDG_STARROCKS_HOST') }}"
-      port: 9030
+      port: 9040
       schema: "{{ env_var('CQDG_STARROCKS_SCHEMA') }}"
       username: "{{ env_var('CQDG_STARROCKS_USER') }}"
       password: "{{ env_var('CQDG_STARROCKS_PASSWORD') }}"

@@ -17,5 +17,13 @@ require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 models:
   sjra62:
-    staging:
+
+    cqdg:
       materialized: table
+      +enabled: false
+
+    1000g:
+      materialized: table
+
+    staging:
+      materialized: view

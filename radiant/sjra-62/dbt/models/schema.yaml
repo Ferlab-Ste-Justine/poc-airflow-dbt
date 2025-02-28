@@ -1,12 +1,27 @@
 version: 2
 
 sources:
-  - name: cqdg_datalake
-    schema: cqdg_datalake.cqdg_portal_prod
-    tables:
-      - name: normalized_snv
+#  - name: cqdg_datalake
+#    schema: cqdg_datalake.cqdg_portal_prod
+#    tables:
+#      - name: normalized_snv
+#
+#  - name: starrocks
+#    schema: test
+#    tables:
+#      - name: sequencing_experiment
 
-  - name: starrocks
-    schema: test
+
+  - name: iceberg
+    schema: iceberg_catalog.poc_1000g
     tables:
-      - name: sequencing_experiment
+      - name: clinvar
+#      - name: dbnsfp
+#      - name: gnomad_constraint_v_2_1_1
+      - name: gnomad_genomes_v3
+      - name: occurrences
+#      - name: sequencing_experiment
+#      - name: spliceai_enriched
+#      - name: spliceai_indel
+#      - name: spliceai_snv
+      - name: variants

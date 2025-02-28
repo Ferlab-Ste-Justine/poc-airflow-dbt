@@ -7,7 +7,7 @@
         keys=['part', 'seq_id', 'locus_id'],
 
         distributed_by=['locus_id'],
-        buckets='5 ',
+        buckets=5,
         partition_type='Expr',
         partition_by=['(`part`)'],
 
@@ -22,7 +22,7 @@
 {% set study_filter = "'cag'" %}
 {% set batch_filter = "'annotated_vcf_cqdg_3'" %}
 {% set parts_filter = (58, 59, 60) %}
-{% set lookup_table = ref('stg_locus_lookup').identifier %}
+{% set lookup_table = ref('locus_lookup').identifier %}
 
 -- Normalized SNV data filtered by study and batch
 with normalized_variants as (
@@ -40,12 +40,7 @@ with normalized_variants as (
 
 -- Sequencing experiment data for specific parts
 sequencing_data as (
-    select
-        ldm_sample_id,
-        seq_id,
-        part
-    from {{ source('starrocks', 'sequencing_experiment') }}
-
+    select * from {{ ref('stg_sequencing_experiment') }}
     {% if parts_filter is not none %}
         where part in {{ parts_filter }}
     {% endif %}
@@ -56,13 +51,7 @@ final as (
     select
         s.part as part,
         s.seq_id as seq_id,
-
-        dict_mapping(
-            "{{ lookup_table }}",
-            {{ generate_locus_fields_hash(['chromosome', 'start', 'reference', 'alternate']) }},
-            'locus_id'
-        )
-        as locus_id,
+        {{ get_locus_lookup(lookup_table, ['chromosome', 'start', 'reference', 'alternate'], 'locus_id') }} as locus_id,
 
         -- Coverage and quality metrics
         o.ad_ratio,
