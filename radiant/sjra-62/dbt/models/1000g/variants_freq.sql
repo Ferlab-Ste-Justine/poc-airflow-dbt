@@ -9,7 +9,11 @@
         buckets='5 ',
 
         engine='OLAP',
-        properties="'compression' = 'LZ4', 'replication_num' = '3', 'colocate_with' = 'build_group_1'"
+        properties={
+            'compression': 'LZ4',
+            'replication_num': '3',
+            'colocate_with': 'build_group'
+        }
     )
 }}
 {% set lookup_table = ref('1000g_locus_lookup').identifier %}
