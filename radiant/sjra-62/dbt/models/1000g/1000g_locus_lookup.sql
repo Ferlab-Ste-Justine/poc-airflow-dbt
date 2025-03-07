@@ -32,7 +32,6 @@ combined as (
 
 final as (
     select
-        uuid_numeric() as locus_id,
         c.hash as locus
     from
         combined c

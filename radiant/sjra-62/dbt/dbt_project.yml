@@ -16,7 +16,20 @@ clean-targets:
 require-dbt-version: [">=1.0.0", "<2.0.0"]
 
 models:
+  pre_create:
+    1000g_locus_lookup:
+      insert_columns:
+        - locus
+    linked_clinvar:
+      insert_columns:
+        - locus_id
+        - interpretations
+        - locus
+        - hash
+
   sjra62:
+    pre_create:
+      +enabled: false
 
     cqdg:
       materialized: table
